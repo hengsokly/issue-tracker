@@ -1,6 +1,8 @@
 'use client'
 import { Button, TextArea, TextField } from '@radix-ui/themes'
-import React from 'react'
+import SimpleMDE from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
+
 
 const NewIssuePage = () => {
   return (
@@ -10,7 +12,7 @@ const NewIssuePage = () => {
         <TextField.Input placeholder="Search the docs…" />
       </TextField.Root>
 
-      <TextArea placeholder='Description' />
+      <SimpleMDE placeholder='Description' />
 
       <Button>Submit new issue</Button>
     
