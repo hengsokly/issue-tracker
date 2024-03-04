@@ -46,5 +46,7 @@ const IssuesPage = async () => {
     </div>
   )
 }
+// Tell next to render the route as dynamic
+export const dynamic = 'force-dynamic';
 
 export default IssuesPage

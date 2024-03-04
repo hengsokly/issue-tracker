@@ -50,8 +50,16 @@ const IssueForm = ({issue}: {issue?: Issue}) => {
   const onSubmit: SubmitHandler<IssueFormData> = async (data) => {
     try {
       setSubmitting(true);
-      const response = await axios.post('/api/issues', data);
+      if(issue)
+        await axios.patch('/api/issues/' + issue.id, data);
+      else
+        await axios.post('/api/issues', data);
+      
       router.push('/issues');
+      
+      // Tell nextjs to refresh route from caching
+      router.refresh();
+      
     } catch (error) {
       setSubmitting(false);
       console.log(error);
@@ -85,7 +93,7 @@ const IssueForm = ({issue}: {issue?: Issue}) => {
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
         <Button disabled={isSubmitting}>
-          Submit new issue
+          {issue ? "Update Issue " : "Submit new issue "}
           { isSubmitting && <Spinner></Spinner> }
         </Button>
       </form>
