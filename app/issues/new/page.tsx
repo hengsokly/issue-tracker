@@ -36,8 +36,6 @@ const NewIssuePage = () => {
     resolver: zodResolver(createIssueSchema)
   })
 
-  
-
   const router = useRouter();
 
   const onSubmit: SubmitHandler<IssueForm> = async (data) => {
