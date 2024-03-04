@@ -9,7 +9,10 @@ import Link from '../components/Link';
 
 const IssuesPage = async () => {
   const issues = await prisma.issue.findMany();
-  delay(2000);
+  
+  // this is for delay time to see loading page
+  // Should remove it when shipping your code to production
+  await delay(2000);
 
   return (
     <div>
