@@ -1,6 +1,6 @@
 'use client'
 import { Button, Callout, TextArea, TextField, Text } from '@radix-ui/themes'
-import SimpleMDE from "react-simplemde-editor";
+
 import "easymde/dist/easymde.min.css";
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import axios from 'axios';
@@ -11,7 +11,14 @@ import { createIssueSchema } from '@/app/validationSchemas';
 import { z } from "zod";
 import ErrorMessage from '@/app/components/ErrorMessage';
 import Spinner from '@/app/components/Spinner';
-import delay from 'delay';
+import dynamic from 'next/dynamic';
+
+const SimpleMDE = dynamic(
+  () => import("react-simplemde-editor"), 
+  {
+    ssr: false
+  }
+)
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
@@ -20,7 +27,7 @@ type IssueForm = z.infer<typeof createIssueSchema>;
 //   description: string;
 // }
 
-const NewIssuePage = async () => {
+const NewIssuePage = () => {
   const [error, setError] = useState('');
   const [isSubmitting, setSubmitting] = useState(false);
   const {
@@ -50,8 +57,6 @@ const NewIssuePage = async () => {
       setError('An unexpect error occure!')
     }
   }
-
-  await delay(2000)
 
   return (
     <div className='max-w-xl'>
