@@ -3,7 +3,7 @@ import { Issue } from '@prisma/client';
 import { Card, Flex, Heading, Text } from '@radix-ui/themes';
 import ReactMarkdown from 'react-markdown';
 
-const IssueDetail = ({issue}: {issue: Issue}) => {
+const IssueDetail = async({issue}: {issue: Issue}) => {
   return (
     <div>
       <Heading>{issue.title}</Heading>
