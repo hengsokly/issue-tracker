@@ -12,7 +12,7 @@ const handler = NextAuth({
     })
   ],
   session: {
-    strategy: 'jwt'
+    strategy: 'jwt' //It is require when working oauth
   }
 })
 
