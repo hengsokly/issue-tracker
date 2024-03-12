@@ -5,6 +5,7 @@ import { ArrowUpIcon } from "@radix-ui/react-icons";
 import { Table } from "@radix-ui/themes";
 import NextLink from "next/link";
 import IssueActions from "./IssueActions";
+import Pagination from "./_components/Pagination";
 
 const statuses = Object.values(Status);
 const columns: { label: string; value: keyof Issue; className?: string }[] = [
@@ -13,20 +14,31 @@ const columns: { label: string; value: keyof Issue; className?: string }[] = [
   { label: "Created At", value: "createdAt", className: "hidden md:table-cell" },
 ];
 
-const IssuesPage = async ({
-  searchParams,
-}: {
-  searchParams: { status: Status; orderBy: keyof Issue };
-}) => {
+interface Props {
+  // All search Params are string type, that's why page is pass with string
+  searchParams: { 
+    status: Status; 
+    orderBy: keyof Issue;
+    page: string;
+  }
+}
+
+const IssuesPage = async ({searchParams}: Props) => {
   const status = statuses.includes(searchParams.status)
     ? searchParams.status
     : undefined;
 
+  const page = parseInt(searchParams.page) || 1;
+  const pageSize = 10;
   const orderBy = columns.map(column => column.value).includes(searchParams.orderBy) ? {[searchParams.orderBy]: 'asc'} : undefined;
   const issues = await prisma.issue.findMany({
-    where: { status },
-    orderBy: orderBy
+    where: { status: status },
+    orderBy: orderBy,
+    skip: (page - 1) * pageSize,
+    take: pageSize
   });
+
+  const issueCount = await prisma.issue.count({where: {status}})
 
   // this is for delay time to see loading page
   // Should remove it when shipping your code to production
@@ -79,6 +91,8 @@ const IssuesPage = async ({
           ))}
         </Table.Body>
       </Table.Root>
+
+      <Pagination currentPage={page} itemCount={issueCount} pageSize={pageSize}/>
     </div>
   );
 };
