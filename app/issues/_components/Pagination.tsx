@@ -8,6 +8,7 @@ import {
 } from "@radix-ui/react-icons";
 import { Button, Flex, Text } from "@radix-ui/themes";
 import { useRouter, useSearchParams } from "next/navigation";
+import PageSizeSelect from "./PageSizeSelect";
 interface Props {
   itemCount: number;
   pageSize: number;
@@ -68,6 +69,8 @@ const Pagination = ({ itemCount, pageSize, currentPage }: Props) => {
       >
         <DoubleArrowRightIcon />
       </Button>
+
+      <PageSizeSelect />
     </Flex>
   );
 };
