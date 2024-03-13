@@ -1,13 +1,14 @@
 import { Issue } from "@prisma/client";
-import { ArrowUpIcon } from "@radix-ui/react-icons";
+import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 import { Table } from "@radix-ui/themes";
-import { default as Link, default as NextLink } from "next/link";
+import Link from "next/link";
 import { IssueStatusBadge } from "../components";
 
 export interface IssueQuery {
   status: Status;
   orderBy: keyof Issue;
   page: string;
+  sortDirection: string;
 }
 
 interface Props {
@@ -21,23 +22,40 @@ const IssueTable = ({ searchParams, issues }: Props) => {
     <Table.Root variant="surface">
       <Table.Header>
         <Table.Row>
-          {columns.map((column) => (
-            <Table.ColumnHeaderCell
-              key={column.value}
-              className={column.className}
-            >
-              <NextLink
-                href={{
-                  query: { ...searchParams, orderBy: column.value },
-                }}
+          {columns.map((column) => {
+            const sortDirection =
+              searchParams.orderBy == column.value &&
+              searchParams.sortDirection == "desc"
+                ? "asc"
+                : "desc";
+            const sortDirectionIcon =
+              searchParams.orderBy == column.value &&
+              (searchParams.sortDirection == "desc" ? (
+                <ArrowDownIcon className="inline" />
+              ) : (
+                <ArrowUpIcon className="inline" />
+              ));
+
+            return (
+              <Table.ColumnHeaderCell
+                key={column.value}
+                className={column.className}
               >
-                {column.label}
-                {searchParams.orderBy == column.value && (
-                  <ArrowUpIcon className="inline" />
-                )}
-              </NextLink>
-            </Table.ColumnHeaderCell>
-          ))}
+                <Link
+                  href={{
+                    query: {
+                      ...searchParams,
+                      orderBy: column.value,
+                      sortDirection: sortDirection,
+                    },
+                  }}
+                >
+                  {column.label}
+                  {sortDirectionIcon}
+                </Link>
+              </Table.ColumnHeaderCell>
+            );
+          })}
         </Table.Row>
       </Table.Header>
 
