@@ -1,13 +1,16 @@
-import Image from "next/image";
-import Pagination from "./issues/_components/Pagination";
-import { Button } from "@radix-ui/themes";
-import { DoubleArrowLeftIcon } from "@radix-ui/react-icons";
+import prisma from "@/prisma/client";
+import IssueSummary from "./IssueSummary";
 import LatestIssues from "./LatestIssues";
 
-export default function Home({searchParams}: {searchParams: {page: string}}) {
+export default async function Home({searchParams}: {searchParams: { page: string };}) {
+  const open = await prisma.issue.count({ where: { status: "OPEN" } });
+  const inProgress = await prisma.issue.count({where: { status: "IN_PROGRESS" }});
+  const closed = await prisma.issue.count({ where: { status: "CLOSED" } });
+
   return (
     <div>
-      <LatestIssues />      
+      <LatestIssues />
+      <IssueSummary open={open} inProgress={inProgress} closed={closed} />
     </div>
   );
 }
