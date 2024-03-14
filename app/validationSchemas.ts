@@ -21,3 +21,7 @@ export const patchIssueSchema = z.object({
     .nullable(),
   status: z.enum(Object.keys(Status)).optional(),
 });
+
+export const commentSchema = z.object({
+  content: z.string().min(1, "Content is required.").max(255),
+})

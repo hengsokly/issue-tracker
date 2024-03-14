@@ -3,6 +3,7 @@
 import { Issue, Status } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 
 const AssignStatusSelect = ({issue}: {issue: Issue}) => {
@@ -12,12 +13,16 @@ const AssignStatusSelect = ({issue}: {issue: Issue}) => {
     { label: "Closed", value: "CLOSED" }
   ];
 
-  const assignIssueStatus = (status: Status) => {
-    axios.patch("/api/issues/" + issue.id, {
+  const router = useRouter();
+
+  const assignIssueStatus = async(status: Status) => {
+    await axios.patch("/api/issues/" + issue.id, {
       status,
     }).catch((error) => {
       toast.error("Changes cannot be saved!");
     });
+
+    router.refresh();
   }
 
   return (

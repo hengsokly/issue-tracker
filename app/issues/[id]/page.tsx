@@ -10,6 +10,8 @@ import IssueDetail from "./IssueDetail";
 import { cache } from "react";
 import AssignStatusSelect from "./AssignStatusSelect";
 import CommentInput from "./CommentInput";
+import { comment } from "postcss";
+import CommentList from "./CommentList";
 
 interface Props {
   params: {
@@ -48,7 +50,10 @@ const IssueDetailPage = async ({ params }: Props) => {
           </Box>
 
           <Box className="md:col-span-4">
-            <CommentInput user={session.user} />
+            <Flex gap={'2'} direction={'column'}>
+              <CommentList issueId={issue.id}/>
+              <CommentInput user={session.user} issueId={issue.id} />
+            </Flex>
           </Box>
         </>
       )}
