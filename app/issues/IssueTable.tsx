@@ -10,6 +10,7 @@ export interface IssueQuery {
   page: string;
   sortDirection: string;
   pageSize: string;
+  assignedToUserId: string;
 }
 
 interface Props {

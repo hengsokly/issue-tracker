@@ -16,6 +16,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
   const status = statuses.includes(searchParams.status)
     ? searchParams.status
     : undefined;
+  const assignedToUserId = searchParams.assignedToUserId && searchParams.assignedToUserId != 'ALL' ? searchParams.assignedToUserId : undefined;
 
   const page = parseInt(searchParams.page) || 1;
   const pageSize = parseInt(searchParams.pageSize) || 10;
@@ -26,7 +27,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
     ? { [searchParams.orderBy]: sortDirection }
     : undefined;
   const issues = await prisma.issue.findMany({
-    where: { status: status },
+    where: { status, assignedToUserId },
     orderBy: orderBy,
     skip: (page - 1) * pageSize,
     take: pageSize,
