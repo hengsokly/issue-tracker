@@ -30,6 +30,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
     orderBy: orderBy,
     skip: (page - 1) * pageSize,
     take: pageSize,
+    include: { assignedToUser: true },
   });
 
   const issueCount = await prisma.issue.count({ where: { status } });
@@ -50,7 +51,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
     </Flex>
   );
 };
-// Tell next to render the route as dynamic, routes are rendered for each user at request time.
+// Tell next to render the route as dynamic, routes are rendered for each issue at request time.
 export const dynamic = "force-dynamic";
 
 export default IssuesPage;

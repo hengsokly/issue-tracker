@@ -20,7 +20,8 @@ export async function PATCH(
       { status: 400 }
     );
 
-  const { assignedToUserId, title, description } = body;
+  const { assignedToUserId, title, description, status } = body;
+
   if (assignedToUserId) {
     const user = await prisma.user.findUnique({
       where: { id: assignedToUserId },
@@ -38,7 +39,7 @@ export async function PATCH(
 
   const updatedIssue = await prisma.issue.update({
     where: { id: issue.id },
-    data: { title, description, assignedToUserId },
+    data: { title, description, assignedToUserId, status },
   });
 
   return NextResponse.json(updatedIssue, { status: 200 });

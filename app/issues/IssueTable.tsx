@@ -1,6 +1,6 @@
 import { Issue } from "@prisma/client";
 import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
-import { Table } from "@radix-ui/themes";
+import { Avatar, Table } from "@radix-ui/themes";
 import Link from "next/link";
 import { IssueStatusBadge } from "../components";
 
@@ -57,6 +57,8 @@ const IssueTable = ({ searchParams, issues }: Props) => {
               </Table.ColumnHeaderCell>
             );
           })}
+
+          <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
         </Table.Row>
       </Table.Header>
 
@@ -75,6 +77,17 @@ const IssueTable = ({ searchParams, issues }: Props) => {
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
               {issue.createdAt.toDateString()}
+            </Table.Cell>
+
+            <Table.Cell className="hidden md:table-cell">
+              {issue.assignedToUser && (
+                <Avatar
+                  fallback="?"
+                  src={issue.assignedToUser.image!}
+                  size={"2"}
+                  radius="full"
+                />
+              )}
             </Table.Cell>
           </Table.Row>
         ))}
