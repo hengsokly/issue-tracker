@@ -9,6 +9,7 @@ import EditIssueButton from "./EditIssueButton";
 import IssueDetail from "./IssueDetail";
 import { cache } from "react";
 import AssignStatusSelect from "./AssignStatusSelect";
+import CommentInput from "./CommentInput";
 
 interface Props {
   params: {
@@ -18,13 +19,15 @@ interface Props {
 
 // Use cached function to query one from database and return later from cache.
 // Here we have 2 times for fetching issue, that's why we use cache to improve the performent.
-const fetchIssue = cache((issueId: number) => prisma.issue.findUnique({where: { id: issueId }}));
+const fetchIssue = cache((issueId: number) =>
+  prisma.issue.findUnique({ where: { id: issueId } })
+);
 
 const IssueDetailPage = async ({ params }: Props) => {
   // if(typeof params.id !== 'number') notFound();
   const session = await getServerSession(authOptions);
 
-  const issue = await fetchIssue(parseInt(params.id))
+  const issue = await fetchIssue(parseInt(params.id));
   if (!issue) notFound();
 
   return (
@@ -34,14 +37,20 @@ const IssueDetailPage = async ({ params }: Props) => {
       </Box>
 
       {session && (
-        <Box>
-          <Flex direction={"column"} gap={"5"}>
-            <AssigneeSelect issue={issue} />
-            <AssignStatusSelect issue={issue} />
-            <EditIssueButton issueId={issue.id}></EditIssueButton>
-            <DeleteIssueButton issueId={issue.id}></DeleteIssueButton>
-          </Flex>
-        </Box>
+        <>
+          <Box>
+            <Flex direction={"column"} gap={"5"}>
+              <AssigneeSelect issue={issue} />
+              <AssignStatusSelect issue={issue} />
+              <EditIssueButton issueId={issue.id}></EditIssueButton>
+              <DeleteIssueButton issueId={issue.id}></DeleteIssueButton>
+            </Flex>
+          </Box>
+
+          <Box className="md:col-span-4">
+            <CommentInput user={session.user} />
+          </Box>
+        </>
       )}
     </Grid>
   );
@@ -50,7 +59,7 @@ const IssueDetailPage = async ({ params }: Props) => {
 // Be careful with the function name spelling
 // It is for support SEO and rendering dynmaic for each issue detail
 export async function generateMetadata({ params }: Props) {
-  const issue = await fetchIssue(parseInt(params.id))
+  const issue = await fetchIssue(parseInt(params.id));
 
   return {
     title: issue?.title,
