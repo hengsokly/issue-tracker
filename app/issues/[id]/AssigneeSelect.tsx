@@ -4,6 +4,7 @@ import { Skeleton } from "@/app/components";
 import { Issue, User } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { useQuery } from "react-query";
 
@@ -25,14 +26,18 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
   //   fetchUser();
   // }, [])
 
-  const assignIssue = (userId: string) => {
+  const router = useRouter();
+
+  const assignIssue = async(userId: string) => {
     let assignedToUserId = userId === unassigned ? null : userId;
 
-    axios.patch("/api/issues/" + issue.id, {
+    await axios.patch("/api/issues/" + issue.id, {
       assignedToUserId,
     }).catch((error) => {
       toast.error("Changes cannot be saved!");
     });
+
+    router.refresh();
   }
 
   return (

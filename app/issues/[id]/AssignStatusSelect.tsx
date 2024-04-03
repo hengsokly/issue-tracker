@@ -28,7 +28,7 @@ const AssignStatusSelect = ({issue}: {issue: Issue}) => {
   return (
     <>
       <Select.Root
-        defaultValue={issue.status}
+        value={issue.status}
         onValueChange={assignIssueStatus}
       >
         <Select.Trigger placeholder="Assign status..." />
